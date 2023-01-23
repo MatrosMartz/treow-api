@@ -1,0 +1,44 @@
+{
+	"name": "treow-api",
+	"scripts": {
+		"build": "tsup",
+		"preview": "node run dist/index.js | pino-pretty",
+		"dev": "tsc --watch src/index.ts | pino-pretty",
+		"test": "vitest",
+		"lint": "eslint --fix .",
+		"fmt": "prettier --write .",
+		"commit": "cz",
+		"prepare": "husky install"
+	},
+	"dependencies": {
+		"@fastify/swagger": "^8.3.0",
+		"dotenv": "^16.0.3",
+		"fastify": "^4.12.0"
+	},
+	"devDependencies": {
+		"@types/node": "^18.11.18",
+		"@types/supertest": "^2.0.12",
+		"@typescript-eslint/eslint-plugin": "^5.0.0",
+		"@typescript-eslint/parser": "^5.48.2",
+		"commitizen": "^4.3.0",
+		"cz-conventional-changelog": "^3.3.0",
+		"eslint": "^8.32.0",
+		"eslint-config-prettier": "^8.6.0",
+		"eslint-config-standard-with-typescript": "^31.0.0",
+		"eslint-plugin-import": "^2.25.2",
+		"eslint-plugin-n": "^15.0.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-promise": "^6.0.0",
+		"pino-pretty": "^9.1.1",
+		"prettier": "^2.8.3",
+		"supertest": "^6.3.3",
+		"tsup": "^6.5.0",
+		"typescript": "^4.9.4",
+		"vitest": "^0.27.3"
+	},
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	}
+}
