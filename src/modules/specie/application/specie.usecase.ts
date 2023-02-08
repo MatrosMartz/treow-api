@@ -1,68 +1,33 @@
 import {
 	SpecieRepo,
-	SpecieDTO,
 	SpecieEntity,
 	ConservationStatus,
+	SpecieValue,
 } from '$specie/domain'
+import { UserUseCase } from '$user/application'
 
-import { randomUUID } from 'crypto'
-
-class SpecieUseCase {
-	readonly #repo: SpecieRepo
-	constructor(repo: SpecieRepo) {
-		this.#repo = repo
-	}
-
-	async create({
-		commonNames = [],
-		status = ConservationStatus.DD,
-		...props
-	}: {
+// eslint-disable-next-line @typescript-eslint/no-namespace
+declare namespace UseCase {
+	type Create = (props: {
 		cientificName: string
 		commonNames?: string[]
 		status?: ConservationStatus
 		userEmail: string
-	}): Promise<SpecieEntity> {
-		return this.#repo.create({
-			id: randomUUID(),
-			commonNames,
-			status,
-			...props,
-		})
+	}) => Promise<SpecieEntity>
+}
+
+class SpecieUseCase {
+	readonly #repo: SpecieRepo
+	readonly #userUC: UserUseCase
+	constructor({ repo, userUC }: { repo: SpecieRepo; userUC: UserUseCase }) {
+		this.#repo = repo
+		this.#userUC = userUC
 	}
 
-	async delete({
-		cientificName: n,
-		...props
-	}: SpecieDTO.Delete): Promise<void> {
-		this.#repo.delete({ cientificName: n.toLowerCase(), ...props })
-	}
-
-	async find({
-		cientificName,
-	}: SpecieDTO.Find): Promise<SpecieEntity | undefined> {
-		return this.#repo.find({ cientificName: cientificName.toLowerCase() })
-	}
-
-	async list(props: SpecieDTO.List): Promise<SpecieEntity[] | undefined> {
-		return this.#repo.list(props)
-	}
-
-	async update({
-		cientificName: n,
-		...props
-	}: SpecieDTO.Update): Promise<Partial<SpecieEntity>> {
-		return this.#repo.update({ cientificName: n.toLocaleLowerCase(), ...props })
-	}
-
-	async replace({
-		cientificName: n,
-		...props
-	}: SpecieDTO.Replace): Promise<SpecieEntity> {
-		return this.#repo.replace({
-			cientificName: n.toLocaleLowerCase(),
-			...props,
-		})
+	create: UseCase.Create = async ({ userEmail, ...specieProps }) => {
+		const user = await this.#userUC.getUserKind(userEmail)
+		const specie = new SpecieValue({ user, ...specieProps })
+		return this.#repo.create(specie)
 	}
 }
 
