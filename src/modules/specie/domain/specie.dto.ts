@@ -1,6 +1,9 @@
 import { ConservationStatus, SpecieEntity } from './specie.entity'
 
-type TypeOrder = 'normal' | 'inverse'
+enum OrderKind {
+	nor = 'normal',
+	inv = 'inverse',
+}
 
 interface Query {
 	commonNames?: string
@@ -9,9 +12,16 @@ interface Query {
 	checked?: boolean
 }
 
+enum IndentifierKind {
+	id = 'id',
+	cn = 'cientificName',
+}
+
+type Indentifier = { id: string } | { cientificName: string }
+
 interface Order {
-	alphabetical?: TypeOrder
-	danger?: TypeOrder
+	alphabetical?: OrderKind
+	danger?: OrderKind
 }
 interface Page {
 	start: number
@@ -26,22 +36,11 @@ interface UpdateFields {
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace SpecieDTO {
-	interface Create {
-		cientificName: string
-		commonNames: string[]
-		status: ConservationStatus
-		userEmail: string
-		id: string
-	}
+	type Create = SpecieEntity
 
-	interface Delete {
-		cientificName: string
-		userEmail: string
-	}
+	type Delete = Indentifier
 
-	interface Find {
-		cientificName: string
-	}
+	type Find = Indentifier
 
 	interface List {
 		page: Page
@@ -49,17 +48,9 @@ declare namespace SpecieDTO {
 		order: Order
 	}
 
-	interface Replace {
-		cientificName: string
-		userEmail: string
-		content: Omit<SpecieEntity, 'id' | 'cientificName'>
-	}
+	type Replace = { content: Omit<SpecieEntity, IndentifierKind> } & Indentifier
 
-	interface Update {
-		cientificName: string
-		userEmail: string
-		updateFields: UpdateFields
-	}
+	type Update = { updateFields: UpdateFields } & Indentifier
 }
 
-export { SpecieDTO, Order, Query, TypeOrder, UpdateFields }
+export { SpecieDTO, Order, Query, OrderKind, UpdateFields, IndentifierKind }
