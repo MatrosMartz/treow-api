@@ -1,9 +1,11 @@
 import { afterEach, beforeEach, describe, it, expect, vi, Mock } from 'vitest'
+
 import { createApp } from '~/test'
-import speciesRouter from './infraestructure/specie.routes'
-import Repo from './infraestructure/repositorys'
-import { SpecieEntity, SpecieRepo } from './domain'
 import { mockSpecies } from './test'
+
+import speciesRouter from './infraestructure/specie.routes'
+import { Repo } from './infraestructure'
+import { SpecieEntity, SpecieRepo } from './domain'
 
 vi.mock('./infraestructure/repositorys', () => {
 	const MockRepo = vi.fn()
