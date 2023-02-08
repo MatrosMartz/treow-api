@@ -1,3 +1,4 @@
+import { JSONSchema } from 'json-schema-to-ts'
 import { Entity } from '~/types'
 
 enum ConservationStatus {
@@ -37,8 +38,8 @@ const specieSchema = {
 		'status',
 		'checked',
 		'description',
-	],
-} as const
+	] as const,
+} satisfies JSONSchema
 
 type SpecieEntity = Entity<typeof specieSchema>
 
