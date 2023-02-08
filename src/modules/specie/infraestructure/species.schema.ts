@@ -1,12 +1,17 @@
 import { Entity } from '~/types'
 import { RouteGenericInterface } from 'fastify'
-import { ConservationStatus, TypeOrder } from '$specie/domain'
+import { ConservationStatus, OrderKind } from '$specie/domain'
+import { JSONSchema } from 'json-schema-to-ts'
 
-function enumFromArray(array: string[]): string[] {
-	return array.flatMap(v => [v.toUpperCase(), v.toLowerCase()])
+function enumFromArray<T extends string>(array: T[]): T[] {
+	return array.flatMap(v => [v.toUpperCase(), v.toLowerCase()]) as T[]
 }
 
-const enumOrder = enumFromArray(['normal', 'inverse']) as TypeOrder[]
+const enumOrder = enumFromArray(Object.values(OrderKind))
+
+const conservationStatusKeys = Object.keys(ConservationStatus) as Array<
+	keyof typeof ConservationStatus
+>
 
 const querystringSchema = {
 	list: {
@@ -22,7 +27,7 @@ const querystringSchema = {
 				properties: {
 					status: {
 						type: 'string',
-						enum: enumFromArray(Object.keys(ConservationStatus)),
+						enum: enumFromArray(conservationStatusKeys),
 					},
 					name: { type: 'string' },
 					checked: { type: 'boolean' },
@@ -39,7 +44,7 @@ const querystringSchema = {
 			},
 		},
 	},
-} as const
+} satisfies Record<string, JSONSchema>
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace SpecieRouteInterfaces {
