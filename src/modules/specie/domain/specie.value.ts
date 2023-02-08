@@ -1,8 +1,8 @@
-import { UserType } from '$user/domain'
+import { UserKind } from '$user/domain'
 import { ConservationStatus, SpecieEntity } from './specie.entity'
 
 interface Props {
-	user: UserType
+	user: UserKind
 	cientificName: string
 	commonNames?: string[]
 	description?: string
@@ -31,7 +31,7 @@ class SpecieValue implements SpecieEntity {
 		this.commonNames = commonNames
 		this.status = status
 		this.description = description
-		this.checked = user !== UserType.USER
+		this.checked = user !== UserKind.USER
 	}
 }
 
