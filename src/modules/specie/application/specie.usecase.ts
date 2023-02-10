@@ -3,31 +3,49 @@ import {
 	SpecieEntity,
 	ConservationStatus,
 	SpecieValue,
+	OrderKind,
 } from '$specie/domain'
-import { UserUseCase } from '$user/application'
+import { UserKind } from '$user/domain'
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
-declare namespace UseCase {
-	type Create = (props: {
+declare namespace Props {
+	interface Create {
 		cientificName: string
 		commonNames?: string[]
 		status?: ConservationStatus
-		userEmail: string
-	}) => Promise<SpecieEntity>
+		user: UserKind
+	}
+	interface List {
+		page: { start: number; limit: number }
+		filter: {
+			status?: keyof typeof ConservationStatus
+			checked?: boolean
+			name?: string
+		}
+		order: {
+			alphabetical?: OrderKind
+			danger?: OrderKind
+		}
+	}
 }
 
 class SpecieUseCase {
 	readonly #repo: SpecieRepo
-	readonly #userUC: UserUseCase
-	constructor({ repo, userUC }: { repo: SpecieRepo; userUC: UserUseCase }) {
+	constructor(repo: SpecieRepo) {
 		this.#repo = repo
-		this.#userUC = userUC
 	}
 
-	create: UseCase.Create = async ({ userEmail, ...specieProps }) => {
-		const user = await this.#userUC.getUserKind(userEmail)
-		const specie = new SpecieValue({ user, ...specieProps })
+	async create(props: Props.Create): Promise<SpecieEntity> {
+		const specie = new SpecieValue(props)
 		return this.#repo.create(specie)
+	}
+
+	async list({ filter, order, page }: Props.List): Promise<SpecieEntity[]> {
+		const filterParsed = {
+			...filter,
+			status: ConservationStatus[filter.status!],
+		}
+		return (await this.#repo.list({ filter: filterParsed, order, page })) ?? []
 	}
 }
 

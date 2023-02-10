@@ -1,7 +1,6 @@
 import { Handler } from '~/types'
 import { SpecieRouteInterfaces } from './species.schema'
 import { SpecieUseCase } from '$specie/application'
-import { ConservationStatus } from '$specie/domain'
 
 class SpecieCtrl {
 	#useCase: SpecieUseCase
@@ -14,15 +13,7 @@ class SpecieCtrl {
 
 		const page = { ...req.query.page, start: 0, limit: 10 }
 
-		const data = await this.#useCase.list({
-			page,
-			filter: {
-				...filter,
-				status:
-					ConservationStatus[filter.status as keyof typeof ConservationStatus],
-			},
-			order,
-		})
+		const data = await this.#useCase.list({ page, filter, order })
 
 		const MIN_START = 0
 		const PREV_START = page.start - page.limit

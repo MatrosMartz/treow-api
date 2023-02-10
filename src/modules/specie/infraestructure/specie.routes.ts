@@ -1,6 +1,7 @@
-import { FastifyInstance, FastifySchema } from 'fastify'
-import { specieSchema } from '$specie/domain'
-import { SpecieUseCase } from '$specie/application/specie.usecase'
+import { FastifyInstance } from 'fastify'
+
+import { SpecieUseCase } from '$specie/application'
+
 import { SpecieCtrl } from './specie.ctrl'
 import { querystringSchema } from './species.schema.js'
 import Repo from './repositorys'
@@ -25,7 +26,9 @@ const listSchema: FastifySchema = {
 	},
 } as const
 
-const ctrl = new SpecieCtrl(new SpecieUseCase(new Repo()))
+const useCase = new SpecieUseCase(new Repo())
+
+const ctrl = new SpecieCtrl(useCase)
 
 async function speciesRouter(route: FastifyInstance): Promise<void> {
 	route.route({
