@@ -16,5 +16,6 @@ const alias = {
 export default defineConfig({
 	test: {
 		alias,
+		typecheck: { include: ['**/*/.{test,spec}.{ts,js}'] },
 	},
 })
