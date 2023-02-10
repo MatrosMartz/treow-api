@@ -6,6 +6,7 @@ import { mockSpecies } from './test'
 import speciesRouter from './infraestructure/specie.routes'
 import { Repo } from './infraestructure'
 import { SpecieEntity, SpecieRepo } from './domain'
+import { StatusCodes } from '~/types'
 
 vi.mock('./infraestructure/repositorys', () => {
 	const MockRepo = vi.fn()
@@ -58,6 +59,7 @@ describe('List Species', () => {
 		expect(reply.statusCode).toBe(200)
 		expect(reply.headers['content-type']).toMatch(/application\/json/)
 		expect(reply.json<SpecieEntity[]>()).toEqual({
+			status: StatusCodes.OK,
 			data: species,
 			pagination: {
 				self: '/species?page.limit=10&page.start=0',

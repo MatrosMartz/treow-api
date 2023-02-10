@@ -8,7 +8,7 @@ const routesSchemas = {
 
 declare namespace SpecieRoute {
 	interface Find extends RouteGenericInterface {
-		Querystring: Entity<typeof routesSchemas.list.querystring>
+		Querystring: Entity<typeof ListRouteSchema.querystring>
 	}
 }
 

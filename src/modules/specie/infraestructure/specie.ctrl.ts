@@ -1,4 +1,4 @@
-import { Handler } from '~/types'
+import { Handler, StatusCodes } from '~/types'
 import { SpecieRoute } from './route-schemas'
 import { SpecieUseCase } from '$specie/application'
 
@@ -20,6 +20,7 @@ class SpecieCtrl {
 		const NEXT_START = (page.start as number) + (page.limit as number)
 
 		const species = {
+			status: StatusCodes.OK,
 			data,
 			pagination: {
 				prev:
