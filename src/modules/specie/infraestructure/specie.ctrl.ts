@@ -1,5 +1,5 @@
 import { Handler } from '~/types'
-import { SpecieRouteInterfaces } from './species.schema'
+import { SpecieRoute } from './route-schemas'
 import { SpecieUseCase } from '$specie/application'
 
 class SpecieCtrl {
@@ -8,7 +8,7 @@ class SpecieCtrl {
 		this.#useCase = useCase
 	}
 
-	list: Handler<SpecieRouteInterfaces.Find> = async (req, rep) => {
+	list: Handler<SpecieRoute.Find> = async (req, rep) => {
 		const { filter = {}, order = {} } = req.query
 
 		const page = { ...req.query.page, start: 0, limit: 10 }

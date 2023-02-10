@@ -1,11 +1,7 @@
-import { Entity } from '~/types'
-import { RouteGenericInterface } from 'fastify'
-import { ConservationStatus, OrderKind } from '$specie/domain'
-import { JSONSchema } from 'json-schema-to-ts'
+import { RouteSchema, StatusCodes } from '~/types'
+import { enumFromArray } from '~/utils'
 
-function enumFromArray<T extends string>(array: T[]): T[] {
-	return array.flatMap(v => [v.toUpperCase(), v.toLowerCase()]) as T[]
-}
+import { ConservationStatus, OrderKind, specieSchema } from '$specie/domain'
 
 const enumOrder = enumFromArray(Object.values(OrderKind))
 
@@ -13,8 +9,8 @@ const conservationStatusKeys = Object.keys(ConservationStatus) as Array<
 	keyof typeof ConservationStatus
 >
 
-const querystringSchema = {
-	list: {
+const ListRouteSchema = {
+	querystring: {
 		type: 'object',
 		properties: {
 			page: {
@@ -44,13 +40,24 @@ const querystringSchema = {
 			},
 		},
 	},
-} satisfies Record<string, JSONSchema>
+	respose: {
+		200: {
+			type: 'object',
+			properties: {
+				status: { type: 'number', enum: [StatusCodes.OK] as const },
+				data: {
+					type: 'array',
+					items: specieSchema,
+				},
+				pagination: {
+					prev: { type: 'string' },
+					self: { type: 'string' },
+					next: { type: 'string' },
+				},
+			},
+			required: ['status', 'data', 'pagination'] as const,
+		},
+	},
+} satisfies RouteSchema
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
-declare namespace SpecieRouteInterfaces {
-	interface Find extends RouteGenericInterface {
-		Querystring: Entity<typeof querystringSchema.list>
-	}
-}
-
-export { querystringSchema, SpecieRouteInterfaces }
+export { ListRouteSchema }
