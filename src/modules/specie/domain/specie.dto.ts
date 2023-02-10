@@ -34,7 +34,6 @@ interface UpdateFields {
 	checked?: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace SpecieDTO {
 	type Create = SpecieEntity
 

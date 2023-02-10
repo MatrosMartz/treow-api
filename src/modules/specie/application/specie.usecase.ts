@@ -7,7 +7,6 @@ import {
 } from '$specie/domain'
 import { UserKind } from '$user/domain'
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Props {
 	interface Create {
 		cientificName: string
