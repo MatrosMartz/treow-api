@@ -36,7 +36,7 @@ class SpecieUseCase {
 
 	async create(props: Props.Create): Promise<SpecieEntity> {
 		const specie = new SpecieValue(props)
-		return this.#repo.create(specie)
+		return await this.#repo.create(specie)
 	}
 
 	async list({ filter, order, page }: Props.List): Promise<SpecieEntity[]> {
