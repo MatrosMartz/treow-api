@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify'
+import { FastifyPluginAsync } from 'fastify'
 
 import { SpecieUseCase } from '$specie/application'
 
@@ -10,7 +10,7 @@ const useCase = new SpecieUseCase(new Repo())
 
 const ctrls = new SpecieCtrl(useCase)
 
-async function speciesRouter(route: FastifyInstance): Promise<void> {
+const speciesRouter: FastifyPluginAsync = async route => {
 	route.get('/', { schema: schemas.list }, ctrls.list)
 }
 
