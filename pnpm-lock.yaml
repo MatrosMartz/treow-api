@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@faker-js/faker': ^7.6.0
+  '@fastify/env': ^4.2.0
   '@fastify/swagger': ^8.3.0
   '@fastify/type-provider-json-schema-to-ts': ^2.2.2
   '@types/node': ^18.11.18
@@ -10,7 +11,6 @@ specifiers:
   '@typescript-eslint/parser': ^5.48.2
   commitizen: ^4.3.0
   cz-conventional-changelog: ^3.3.0
-  dotenv: ^16.0.3
   eslint: ^8.32.0
   eslint-config-prettier: ^8.6.0
   eslint-config-standard-with-typescript: ^31.0.0
@@ -29,9 +29,9 @@ specifiers:
   vitest: ^0.28.1
 
 dependencies:
+  '@fastify/env': 4.2.0
   '@fastify/swagger': 8.3.0
   '@fastify/type-provider-json-schema-to-ts': 2.2.2_e57x3dokuxc2xctlg5myyn2cj4
-  dotenv: 16.0.3
   fastify: 4.12.0
   json-schema-to-ts: 2.6.2
 
@@ -429,6 +429,13 @@ packages:
 
   /@fastify/deepmerge/1.3.0:
     resolution: {integrity: sha512-J8TOSBq3SoZbDhM9+R/u77hP93gz/rajSA+K2kGyijPpORPWUXHUpTaleoj+92As0S9uPRP7Oi8IqMf0u+ro6A==}
+    dev: false
+
+  /@fastify/env/4.2.0:
+    resolution: {integrity: sha512-sj1ehQZPD6tty+6bhzZw1uS2K2s6eOB46maJ2fE+AuTYxdHKVVW/AHXqCYGu3nH9kgzdXsheu3/148ZoBeoQOw==}
+    dependencies:
+      env-schema: 5.2.0
+      fastify-plugin: 4.5.0
     dev: false
 
   /@fastify/error/3.2.0:
@@ -1366,6 +1373,11 @@ packages:
       esutils: 2.0.3
     dev: true
 
+  /dotenv-expand/9.0.0:
+    resolution: {integrity: sha512-uW8Hrhp5ammm9x7kBLR6jDfujgaDarNA02tprvZdyrJ7MpdzD1KyrIHG4l+YoC2fJ2UcdFdNWNWIjt+sexBHJw==}
+    engines: {node: '>=12'}
+    dev: false
+
   /dotenv/16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
@@ -1388,6 +1400,14 @@ packages:
     dependencies:
       once: 1.4.0
     dev: true
+
+  /env-schema/5.2.0:
+    resolution: {integrity: sha512-36/6cZ+zIbcPA2ANrzp7vTz2bS8/zdZaq2RPFqJVtCGJ4P55EakgJ1BeKP8RMvEmM7ndrnHdJXzL3J1dHrEm1w==}
+    dependencies:
+      ajv: 8.12.0
+      dotenv: 16.0.3
+      dotenv-expand: 9.0.0
+    dev: false
 
   /error-ex/1.3.2:
     resolution: {integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==}
