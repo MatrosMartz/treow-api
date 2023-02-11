@@ -5,7 +5,7 @@ import { mockSpecies } from './test'
 
 import speciesRouter from './infraestructure/specie.routes'
 import { Repo } from './infraestructure'
-import { SpecieEntity, SpecieRepo } from './domain'
+import { SpecieRepo } from './domain'
 import { StatusCodes } from '~/types'
 
 vi.mock('./infraestructure/repositorys', () => {
@@ -47,23 +47,23 @@ describe('List Species', () => {
 
 		repo.list.mockResolvedValueOnce(species)
 
-		const reply = await app.inject().get('/species?page.limit=10&page.start=0')
+		const reply = await app.inject().get('/species?page.limit=10&page.offset=0')
 
 		expect(repo.list).toHaveBeenCalledTimes(1)
 		expect(repo.list).toBeCalledWith({
-			page: { start: 0, limit: 10 },
+			page: { offser: 0, limit: 10 },
 			filter: {},
 			order: {},
 		})
 
-		expect(reply.statusCode).toBe(200)
-		expect(reply.headers['content-type']).toMatch(/application\/json/)
-		expect(reply.json<SpecieEntity[]>()).toEqual({
-			status: StatusCodes.OK,
+		expect(reply.statusCode).toBe(StatusCodes.OK)
+		expect(reply.headers['Content-Type']).toMatch(/json/)
+		expect(reply.json()).toEqual({
+			statusCode: StatusCodes.OK,
 			data: species,
 			pagination: {
-				self: '/species?page.limit=10&page.start=0',
-				next: '/species?page.limit=10&page.start=10',
+				self: '/species?page.limit=10&page.offset=0',
+				next: '/species?page.limit=10&page.offset=10',
 			},
 		})
 	})

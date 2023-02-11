@@ -24,7 +24,7 @@ interface Order {
 	danger?: OrderKind
 }
 interface Page {
-	start: number
+	offset: number
 	limit: number
 }
 

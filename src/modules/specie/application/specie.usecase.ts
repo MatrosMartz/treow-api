@@ -15,7 +15,7 @@ declare namespace Props {
 		user: UserKind
 	}
 	interface List {
-		page: { start: number; limit: number }
+		page: { offset: number; limit: number }
 		filter: {
 			status?: keyof typeof ConservationStatus
 			checked?: boolean

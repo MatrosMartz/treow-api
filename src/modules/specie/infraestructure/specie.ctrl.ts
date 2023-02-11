@@ -11,24 +11,25 @@ class SpecieCtrl {
 	list: Handler<SpecieRoute.Find> = async (req, rep) => {
 		const { filter = {}, order = {} } = req.query
 
-		const page = { ...req.query.page, start: 0, limit: 10 }
+		const MIN_OFFSET = 0
+		const DEFAULT_LIMIT = 10
+		const page = { offset: MIN_OFFSET, limit: DEFAULT_LIMIT, ...req.query.page }
 
 		const data = await this.#useCase.list({ page, filter, order })
 
-		const MIN_START = 0
-		const PREV_START = page.start - page.limit
-		const NEXT_START = (page.start as number) + (page.limit as number)
+		const PREV_OFFSET = page.offset - page.limit
+		const NEXT_OFFSET = page.offset + page.limit
 
 		const species = {
-			status: StatusCodes.OK,
+			statusCode: StatusCodes.OK,
 			data,
 			pagination: {
 				prev:
-					PREV_START > MIN_START
-						? req.url.replace(/(?<=start=)(\d+)/, `${PREV_START}`)
+					PREV_OFFSET > MIN_OFFSET
+						? req.url.replace(/(?<=offset=)(\d+)/, `${PREV_OFFSET}`)
 						: undefined,
 				self: req.url,
-				next: req.url.replace(/(?<=start=)(\d+)/, `${NEXT_START}`),
+				next: req.url.replace(/(?<=offset=)(\d+)/, `${NEXT_OFFSET}`),
 			},
 		}
 		return species

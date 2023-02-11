@@ -15,7 +15,7 @@ const ListRouteSchema = {
 		properties: {
 			page: {
 				type: 'object',
-				properties: { start: { type: 'number' }, limit: { type: 'number' } },
+				properties: { offset: { type: 'number' }, limit: { type: 'number' } },
 				additionalProperties: false,
 			},
 			filter: {
@@ -44,18 +44,22 @@ const ListRouteSchema = {
 		200: {
 			type: 'object',
 			properties: {
-				status: { type: 'number', enum: [StatusCodes.OK] as const },
+				statusCode: { type: 'number', enum: [StatusCodes.OK] as const },
 				data: {
 					type: 'array',
 					items: specieSchema,
 				},
 				pagination: {
-					prev: { type: 'string' },
-					self: { type: 'string' },
-					next: { type: 'string' },
+					type: 'object',
+					properties: {
+						prev: { type: 'string' },
+						self: { type: 'string' },
+						next: { type: 'string' },
+					},
+					required: ['self'] as const,
 				},
 			},
-			required: ['status', 'data', 'pagination'] as const,
+			required: ['statusCode', 'data', 'pagination'] as const,
 		},
 	},
 } satisfies RouteSchema
