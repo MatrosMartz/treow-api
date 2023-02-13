@@ -1,9 +1,8 @@
 import { RouteSchema, StatusCodes } from '~/types'
-import { enumFromArray } from '~/utils'
 
 import { ConservationStatus, OrderKind, specieSchema } from '$specie/domain'
 
-const enumOrder = enumFromArray(Object.values(OrderKind))
+const enumOrder = Object.values(OrderKind)
 
 const conservationStatusKeys = Object.keys(ConservationStatus) as Array<
 	keyof typeof ConservationStatus
@@ -15,7 +14,11 @@ const ListRouteSchema = {
 		properties: {
 			page: {
 				type: 'object',
-				properties: { offset: { type: 'number' }, limit: { type: 'number' } },
+				properties: {
+					offset: { type: 'number', default: 0 },
+					limit: { type: 'number', default: 10 },
+				},
+				required: ['offset', 'limit'] as const,
 				additionalProperties: false,
 			},
 			filter: {
@@ -23,7 +26,7 @@ const ListRouteSchema = {
 				properties: {
 					status: {
 						type: 'string',
-						enum: enumFromArray(conservationStatusKeys),
+						enum: conservationStatusKeys,
 					},
 					name: { type: 'string' },
 					checked: { type: 'boolean' },
@@ -36,7 +39,6 @@ const ListRouteSchema = {
 					alphabetical: { type: 'string', enum: enumOrder },
 					danger: { type: 'string', enum: enumOrder },
 				},
-				additionalProperties: false,
 			},
 		},
 	},

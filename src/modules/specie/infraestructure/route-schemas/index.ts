@@ -9,7 +9,6 @@ const schemas = {
 declare namespace SpecieRoute {
 	interface Find extends RouteGenericInterface {
 		Querystring: Entity<typeof ListRouteSchema.querystring>
-		Response: Entity<typeof ListRouteSchema.respose>
 	}
 }
 

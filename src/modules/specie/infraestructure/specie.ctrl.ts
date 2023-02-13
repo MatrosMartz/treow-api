@@ -1,6 +1,8 @@
 import { Handler, StatusCodes } from '~/types'
-import { SpecieRoute } from './route-schemas'
+
 import { SpecieUseCase } from '$specie/application'
+
+import { SpecieRoute } from './route-schemas'
 
 class SpecieCtrl {
 	#useCase: SpecieUseCase
@@ -11,9 +13,14 @@ class SpecieCtrl {
 	list: Handler<SpecieRoute.Find> = async (req, rep) => {
 		const { filter = {}, order = {} } = req.query
 
+		const page = req.query.page!
+
 		const MIN_OFFSET = 0
-		const DEFAULT_LIMIT = 10
-		const page = { offset: MIN_OFFSET, limit: DEFAULT_LIMIT, ...req.query.page }
+
+		if (page.offset < MIN_OFFSET) {
+			rep.statusCode = StatusCodes.NOT_FOUND
+			return { hola: 'mundo' }
+		}
 
 		const data = await this.#useCase.list({ page, filter, order })
 
