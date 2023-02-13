@@ -1,6 +1,6 @@
 # Treow API
 
-![Logo]()
+![Logo](https://raw.githubusercontent.com/TsonkoAlt/treow-api/main/assets/logo.svg)
 
 ## What is Treow API?
 
