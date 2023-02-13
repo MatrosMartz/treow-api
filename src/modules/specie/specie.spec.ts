@@ -20,15 +20,6 @@ vi.mock('./infraestructure/repositorys', () => {
 
 	return { default: MockRepo }
 })
-let repo: Record<keyof SpecieRepo, Mock>
-
-beforeEach(() => {
-	repo = new Repo() as Record<keyof SpecieRepo, Mock>
-})
-
-afterEach(() => {
-	vi.clearAllMocks()
-})
 
 const app = await createApp({
 	plugin: speciesRouter,
@@ -42,6 +33,16 @@ describe('Species Router', () => {
 })
 
 describe('List Species', () => {
+	let repo: Record<keyof SpecieRepo, Mock>
+
+	beforeEach(() => {
+		repo = new Repo() as Record<keyof SpecieRepo, Mock>
+	})
+
+	afterEach(() => {
+		vi.clearAllMocks()
+	})
+
 	it('should be return the fisrt teen species', async () => {
 		const species = mockSpecies(10)
 
@@ -51,13 +52,13 @@ describe('List Species', () => {
 
 		expect(repo.list).toHaveBeenCalledTimes(1)
 		expect(repo.list).toBeCalledWith({
-			page: { offser: 0, limit: 10 },
+			page: { offset: 0, limit: 10 },
 			filter: {},
 			order: {},
 		})
 
 		expect(reply.statusCode).toBe(StatusCodes.OK)
-		expect(reply.headers['Content-Type']).toMatch(/json/)
+		expect(reply.headers['content-type']).toMatch(/json/)
 		expect(reply.json()).toEqual({
 			statusCode: StatusCodes.OK,
 			data: species,
@@ -66,5 +67,16 @@ describe('List Species', () => {
 				next: '/species?page.limit=10&page.offset=10',
 			},
 		})
+	})
+
+	it('should be throw if offset less than zero', async () => {
+		const reply = await app
+			.inject()
+			.get('/species?page.limit=30&page.offset=-10')
+
+		expect(repo.list).not.toHaveBeenCalled()
+
+		expect(reply.statusCode).toBe(StatusCodes.NOT_FOUND)
+		expect(reply.headers['content-type']).toMatch(/json/)
 	})
 })
