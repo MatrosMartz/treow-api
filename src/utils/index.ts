@@ -1,2 +1,2 @@
 export * from './enum-from-array'
-export * from './unflat'
+export { unflatV2 as unflat } from './unflat'

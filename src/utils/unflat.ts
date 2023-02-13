@@ -1,7 +1,4 @@
-function unflat<
-	T extends Record<string, unknown>,
-	K extends Record<string, unknown>
->(target: T): K {
+function unflat<T extends Record<string, unknown>, K>(target: T): K {
 	const delimiter = '.'
 	const response: Record<string, unknown> = {}
 	const entries = Object.entries(target)
@@ -52,4 +49,38 @@ function addKey({ keys, index = 0, value, response }: AProps): void {
 	})
 }
 
-export { unflat }
+function unflatV2<T extends Record<string, unknown>, K>({
+	target,
+	delimiter = '.',
+}: {
+	target: T
+	delimiter?: string
+}): K {
+	const result: Record<string, unknown> = Object.create(null)
+	const entries = Object.entries(target)
+
+	for (const [key, value] of entries)
+		addKeyV2({ keys: key.split(delimiter), value, obj: result })
+
+	return result as K
+}
+
+interface AddKeyProps {
+	keys: string[]
+	value: unknown
+	obj: Record<string, unknown>
+}
+
+function addKeyV2({ keys, value, obj }: AddKeyProps): void {
+	let next = obj
+	const lastKey = keys[keys.length - 1]
+	for (const key of keys) {
+		if (key !== lastKey && typeof next === 'object') {
+			if (!(key in next)) next[key] = Object.create(null)
+			next = next[key] as Record<string, unknown>
+		}
+	}
+	if (typeof next === 'object') next[lastKey] ??= value
+}
+
+export { unflat, unflatV2 }
