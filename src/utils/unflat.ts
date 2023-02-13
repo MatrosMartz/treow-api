@@ -49,20 +49,20 @@ function addKey({ keys, index = 0, value, response }: AProps): void {
 	})
 }
 
-function unflatV2<T extends Record<string, unknown>, K>({
+function unflatV2<T>({
 	target,
 	delimiter = '.',
 }: {
-	target: T
+	target: Record<string, unknown>
 	delimiter?: string
-}): K {
+}): T {
 	const result: Record<string, unknown> = Object.create(null)
 	const entries = Object.entries(target)
 
 	for (const [key, value] of entries)
 		addKeyV2({ keys: key.split(delimiter), value, obj: result })
 
-	return result as K
+	return result as T
 }
 
 interface AddKeyProps {
